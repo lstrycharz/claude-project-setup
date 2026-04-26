@@ -1,0 +1,169 @@
+#!/usr/bin/env bash
+#
+# claude-init — Idempotent project bootstrapper for claude-project-setup
+#
+# Usage:
+#   cd /path/to/new/project
+#   claude-init                    # interactive — prompts for project type
+#   claude-init --type=blog_content
+#   claude-init --type=blog_content --dry-run
+#   claude-init --help
+#
+# What it does:
+#   1. Reads manifest.yaml from the claude-project-setup root
+#   2. Prompts you to pick a project type (or accepts --type=<name>)
+#   3. Creates a .claude/ folder in the current directory if missing
+#   4. Copies the matching skills, references, templates, and checklists
+#      from claude-project-setup into the new project — without overwriting
+#      anything that already exists (idempotent — safe to re-run)
+#   5. Records what was installed in .claude/.installed-manifest
+#
+# Idempotent: running this script N times on the same folder produces the
+# same end state as running it once. Existing files are preserved.
+#
+# Requirements:
+#   - bash 4+
+#   - yq (https://github.com/mikefarah/yq) for parsing YAML
+#       Install on macOS: brew install yq
+
+set -euo pipefail
+
+# -----------------------------------------------------------------------------
+# Resolve the claude-project-setup root (this script's parent's parent)
+# -----------------------------------------------------------------------------
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SETUP_ROOT="$( dirname "$SCRIPT_DIR" )"
+MANIFEST="$SETUP_ROOT/manifest.yaml"
+PROJECT_DIR="$( pwd )"
+TARGET_DIR="$PROJECT_DIR/.claude"
+
+# -----------------------------------------------------------------------------
+# Parse flags
+# -----------------------------------------------------------------------------
+PROJECT_TYPE=""
+DRY_RUN=false
+for arg in "$@"; do
+  case $arg in
+    --type=*)
+      PROJECT_TYPE="${arg#*=}"
+      shift
+      ;;
+    --dry-run)
+      DRY_RUN=true
+      shift
+      ;;
+    -h|--help)
+      sed -n '2,27p' "$0"
+      exit 0
+      ;;
+  esac
+done
+
+# -----------------------------------------------------------------------------
+# Sanity checks
+# -----------------------------------------------------------------------------
+if [[ ! -f "$MANIFEST" ]]; then
+  echo "ERROR: manifest.yaml not found at $MANIFEST" >&2
+  exit 1
+fi
+
+if ! command -v yq >/dev/null 2>&1; then
+  echo "ERROR: yq is required. Install with: brew install yq" >&2
+  exit 1
+fi
+
+# -----------------------------------------------------------------------------
+# Pick the project type if not supplied
+# -----------------------------------------------------------------------------
+if [[ -z "$PROJECT_TYPE" ]]; then
+  echo "Available project types:"
+  yq eval '.project_types | to_entries | .[] | "  " + .key + " — " + .value.name' "$MANIFEST"
+  echo ""
+  read -rp "Project type: " PROJECT_TYPE
+fi
+
+# Verify the project type exists in the manifest
+if ! yq eval ".project_types.${PROJECT_TYPE}" "$MANIFEST" | grep -qv '^null$'; then
+  echo "ERROR: project type '$PROJECT_TYPE' not found in manifest." >&2
+  echo "Run with no arguments to see the list." >&2
+  exit 1
+fi
+
+echo ""
+echo "Setting up '$PROJECT_TYPE' project in: $PROJECT_DIR"
+echo ""
+
+# -----------------------------------------------------------------------------
+# copy_asset: copy a file from master → project, skipping if it already exists
+# -----------------------------------------------------------------------------
+copy_asset() {
+  local src_rel="$1"
+  local subfolder="$2"
+  local src="$SETUP_ROOT/$src_rel"
+  local dest_dir="$TARGET_DIR/$subfolder"
+  local filename
+  filename="$( basename "$src_rel" )"
+  local dest="$dest_dir/$filename"
+
+  if [[ ! -f "$src" ]]; then
+    echo "  [skip — missing source] $src_rel"
+    return
+  fi
+
+  if [[ -f "$dest" ]]; then
+    echo "  [skip — exists]         $subfolder/$filename"
+    return
+  fi
+
+  if $DRY_RUN; then
+    echo "  [DRY RUN — would copy]  $subfolder/$filename"
+    return
+  fi
+
+  mkdir -p "$dest_dir"
+  cp "$src" "$dest"
+  echo "  [copied]                $subfolder/$filename"
+}
+
+# -----------------------------------------------------------------------------
+# Install global assets first, then project-type-specific assets
+# -----------------------------------------------------------------------------
+install_section() {
+  local yaml_path="$1"
+  local subfolder="$2"
+
+  # Pull each list item from the YAML and copy it
+  while IFS= read -r asset; do
+    [[ -z "$asset" || "$asset" == "null" ]] && continue
+    copy_asset "$asset" "$subfolder"
+  done < <( yq eval "${yaml_path}[]" "$MANIFEST" 2>/dev/null || true )
+}
+
+echo "Global assets:"
+install_section ".global.references" "references"
+install_section ".global.templates"  "templates"
+install_section ".global.skills"     "skills"
+
+echo ""
+echo "Project-type assets ($PROJECT_TYPE):"
+install_section ".project_types.${PROJECT_TYPE}.references" "references"
+install_section ".project_types.${PROJECT_TYPE}.templates"  "templates"
+install_section ".project_types.${PROJECT_TYPE}.checklists" "checklists"
+install_section ".project_types.${PROJECT_TYPE}.skills"     "skills"
+
+# -----------------------------------------------------------------------------
+# Record what was installed
+# -----------------------------------------------------------------------------
+if ! $DRY_RUN; then
+  mkdir -p "$TARGET_DIR"
+  {
+    echo "# Installed by claude-init (claude-project-setup)"
+    echo "project_type: $PROJECT_TYPE"
+    echo "installed_at: $( date -u +%Y-%m-%dT%H:%M:%SZ )"
+    echo "setup_root: $SETUP_ROOT"
+  } > "$TARGET_DIR/.installed-manifest"
+fi
+
+echo ""
+echo "Done. Inspect $TARGET_DIR to see what was installed."
+echo "Re-run safely any time — existing files are preserved."

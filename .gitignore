@@ -1,0 +1,46 @@
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Secrets — never commit these
+.env
+.env.*
+*.key
+*.pem
+credentials.json
+secrets.yaml
+*.local.yaml
+
+# Claude session caches (if any project files end up here by accident)
+.claude/cache/
+.claude/sessions/
+.claude/*.log
+
+# Python (if you build helper scripts in Python)
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Node (in case any plugin dev happens here)
+node_modules/
+npm-debug.log*
+
+# Large binaries — keep this folder lean
+*.zip
+*.tar.gz
+*.dmg
+*.pkg
+
+# Local overrides
+manifest.local.yaml
+*.draft.md

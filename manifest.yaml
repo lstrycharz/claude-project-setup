@@ -1,0 +1,82 @@
+# claude-project-setup — Manifest
+#
+# This file is the brain of the claude-init script. It maps "project types"
+# (the kinds of work you actually do) to the assets that should be
+# copied into a new project's .claude/ folder when you bootstrap it.
+#
+# Edit the project_types below to match your real work. Add new
+# project types as your work expands. Remove anything you don't use.
+#
+# Paths are relative to the claude-project-setup root.
+
+# -----------------------------------------------------------------------------
+# Global assets — installed for EVERY project regardless of type
+# -----------------------------------------------------------------------------
+global:
+  references:
+    - references/global/general-rules.md
+  templates:
+    - templates/claude-md-starter.md
+  skills: []
+  plugins: []
+
+# -----------------------------------------------------------------------------
+# Project types
+# -----------------------------------------------------------------------------
+project_types:
+
+  blog_content:
+    name: "Blog / Evergreen Content"
+    description: "Long-form blog posts, evergreen articles, content marketing pieces."
+    references:
+      - references/blog-content/seo-rules.md
+      - references/blog-content/forbidden-words.md
+      - references/blog-content/structure-rules.md
+    templates:
+      - templates/prd-template.md
+      - templates/spec-template.md
+      - templates/workplan-template.md
+    checklists:
+      - references/blog-content/blog-checklist.md
+    skills: []
+    plugins:
+      - marketing
+    notes: "Use for blog posts, pillar pages, and any long-form web content."
+
+  data_analysis:
+    name: "Marketing Data Analysis"
+    description: "Performance reports, PPC analysis, traffic / retention analysis."
+    references:
+      - references/data-analysis/analysis-rules.md
+      - references/data-analysis/visualization-rules.md
+    templates:
+      - templates/prd-template.md
+      - templates/spec-template.md
+    checklists:
+      - references/data-analysis/analysis-checklist.md
+    skills: []
+    plugins:
+      - marketing
+    notes: "Use for PPC reports, traffic analysis, retention studies, campaign reviews."
+
+  research:
+    name: "Research / Synthesis"
+    description: "Deep research projects, competitive intelligence, literature reviews."
+    references:
+      - references/research/research-rules.md
+    templates:
+      - templates/prd-template.md
+      - templates/workplan-template.md
+    checklists: []
+    skills: []
+    plugins: []
+    notes: "Use when the deliverable is a research synthesis, not a publication-ready piece."
+
+# -----------------------------------------------------------------------------
+# Note on code projects:
+#
+# Code projects are handled by the separate `claude-setup` repo (init-claude),
+# which has hooks, secret scanning, slash commands, and PROGRESS.md memory
+# tailored to software work. Don't add a `code` project type here — keep the
+# boundary clean. If you need a quick scripting scratchpad, use init-claude.
+# -----------------------------------------------------------------------------
