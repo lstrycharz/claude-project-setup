@@ -170,6 +170,82 @@ The starter project types you'll see in `manifest.yaml`:
 
 These names are starting points. Edit them to match your team's vocabulary the moment they don't fit.
 
+## What you fill in for each project type
+
+The kit ships with a **skeleton** for every reference file the manifest expects — meaning the files exist, with section headings and placeholder notes, ready for you to replace the placeholders with your team's actual content. Nothing is missing. You just need to populate.
+
+Below is exactly which files belong to which project type, so you know what to fill in when you decide to use one.
+
+### Files that ship pre-built and work as-is
+
+These don't need any editing to use. They work for any project type:
+
+- `templates/prd-template.md` — the *why* (audience, goals, outcomes)
+- `templates/spec-template.md` — the *what* (components, KPIs, milestones)
+- `templates/workplan-template.md` — the *how* (phases, tasks, validation gates)
+- `templates/claude-md-starter.md` — project-specific instruction file Claude reads automatically
+- `bin/claude-init` — the bootstrap script
+- `manifest.yaml` — the project type definitions
+
+### Files that ship as skeletons and need your team's content
+
+For each project type you plan to actually use, fill in the corresponding files in `references/<project-type>/`. Each one starts as a skeleton with section headers and placeholder notes — you replace the placeholders with your team's standards.
+
+**Always-loaded (applies to every project regardless of type):**
+
+| File | What goes in it |
+|------|----------------|
+| `references/global/general-rules.md` | Voice and tone, forbidden words, formatting conventions, anti-patterns that apply universally. **Start here if you only fill in one file** — it pays off across every project. |
+
+**For `recurring_report` (monthly/quarterly reports):**
+
+| File | What goes in it |
+|------|----------------|
+| `references/recurring-report/report-rules.md` | First principles, required structure, content requirements per section, tone for the audience |
+| `references/recurring-report/visualization-rules.md` | When to use charts vs. tables, axis conventions, what to flag visually |
+| `references/recurring-report/report-checklist.md` | Yes/no validation questions Claude runs against the report before delivery |
+
+**For `multi_asset_project` (campaigns, policy rollouts, document packages):**
+
+| File | What goes in it |
+|------|----------------|
+| `references/multi-asset-project/voice-and-standards.md` | Shared voice across assets, cross-asset messaging consistency, asset-specific exceptions |
+| `references/multi-asset-project/asset-coordination-rules.md` | Cross-references, versioning, order of production, approval flow |
+| `references/multi-asset-project/multi-asset-checklist.md` | Validation checklist run against the full asset set, not just individual assets |
+
+**For `research_analysis` (competitive landscapes, deep-dive analyses, ad-hoc questions):**
+
+| File | What goes in it |
+|------|----------------|
+| `references/research-analysis/research-rules.md` | Source rules, age-weighting evidence, citation conventions, anti-patterns |
+| `references/research-analysis/research-checklist.md` | Validation checklist focused on rigor and defensibility |
+
+**For `strategic_initiative` (planning documents, big projects):**
+
+| File | What goes in it |
+|------|----------------|
+| `references/strategic-initiative/planning-rules.md` | Decision rules, milestone rules, stakeholder rules, outcome rules, living-document rules |
+
+### A reasonable order to fill these in
+
+You don't have to populate everything before using the kit. A practical sequence:
+
+1. **First** — `references/global/general-rules.md`. It applies to every project, so the payoff is immediate.
+2. **Second** — the rules file for the project type you'll use most. If your team produces a lot of recurring reports, that's `recurring-report/report-rules.md`. If you do a lot of campaigns, `multi-asset-project/voice-and-standards.md`. Pick whichever maps to the work you do most.
+3. **Third** — the validation checklist for that same project type. Distill 15–25 yes/no questions from the rules file. The checklist is what catches drift in long sessions.
+4. **Then** — populate the other project types over time, as you start using them on real work.
+
+Each rules file can take 30 minutes to fill in if you're working from memory, or 2-3 hours if you want to do external research first. The kit is useful even when files are partial — partial standards are better than no standards.
+
+### Files you can ignore unless you need them
+
+These exist in the manifest as empty arrays (`skills: []`, `plugins: []`) for every project type. You only populate them if you have something to put there:
+
+- **`skills/<skill-name>/SKILL.md`** — Custom skills your team builds for repeated tasks
+- **`plugins/`** entries — Lists of Claude plugins to install per project type
+
+Both are optional. The kit works fine without any custom skills or plugins.
+
 ## Companion repo for software work
 
 If you write code with Claude, use [`claude-setup`](https://github.com/lstrycharz/claude-setup) instead. That repo has security hooks, slash commands, and project-progress tracking tailored specifically for software development. The two repos do not overlap — `claude-setup` for code, `claude-project-setup` for everything else.
