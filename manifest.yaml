@@ -4,8 +4,10 @@
 # (the kinds of work you actually do) to the assets that should be
 # copied into a new project's .claude/ folder when you bootstrap it.
 #
-# Edit the project_types below to match your real work. Add new
-# project types as your work expands. Remove anything you don't use.
+# The four project types below are starting examples — they're shaped to
+# cover the most common kinds of work across creative, HR, analytics, and
+# similar teams. Edit them, rename them, or add new ones to match your
+# team's vocabulary and work patterns. Remove anything you don't use.
 #
 # Paths are relative to the claude-project-setup root.
 
@@ -25,52 +27,64 @@ global:
 # -----------------------------------------------------------------------------
 project_types:
 
-  blog_content:
-    name: "Blog / Evergreen Content"
-    description: "Long-form blog posts, evergreen articles, content marketing pieces."
+  recurring_report:
+    name: "Recurring Report"
+    description: "A report you produce on a regular cadence — monthly, quarterly, weekly. Same structure each time, different data."
     references:
-      - references/blog-content/seo-rules.md
-      - references/blog-content/forbidden-words.md
-      - references/blog-content/structure-rules.md
+      - references/recurring-report/report-rules.md
+      - references/recurring-report/visualization-rules.md
+    templates:
+      - templates/prd-template.md
+      - templates/spec-template.md
+    checklists:
+      - references/recurring-report/report-checklist.md
+    skills: []
+    plugins: []
+    notes: "Use for any cyclical reporting work — analytics dashboards, hiring funnel reviews, campaign performance recaps, etc."
+
+  multi_asset_project:
+    name: "Multi-Asset Project"
+    description: "A project producing multiple linked deliverables that need shared voice, framing, and conventions."
+    references:
+      - references/multi-asset-project/voice-and-standards.md
+      - references/multi-asset-project/asset-coordination-rules.md
     templates:
       - templates/prd-template.md
       - templates/spec-template.md
       - templates/workplan-template.md
     checklists:
-      - references/blog-content/blog-checklist.md
+      - references/multi-asset-project/multi-asset-checklist.md
     skills: []
-    plugins:
-      - marketing
-    notes: "Use for blog posts, pillar pages, and any long-form web content."
+    plugins: []
+    notes: "Use when one project produces several related outputs — e.g. a campaign with brief + email + landing page, or a policy rollout with handbook + comms + FAQ."
 
-  data_analysis:
-    name: "Marketing Data Analysis"
-    description: "Performance reports, PPC analysis, traffic / retention analysis."
+  research_analysis:
+    name: "Research / Analysis"
+    description: "A project that synthesizes multiple sources into a coherent view — competitive landscape, deep-dive analysis, ad-hoc business question."
     references:
-      - references/data-analysis/analysis-rules.md
-      - references/data-analysis/visualization-rules.md
+      - references/research-analysis/research-rules.md
+    templates:
+      - templates/prd-template.md
+      - templates/workplan-template.md
+    checklists:
+      - references/research-analysis/research-checklist.md
+    skills: []
+    plugins: []
+    notes: "Use for one-time research or analysis — competitive scans, people-analytics deep dives, market sizing, customer-segment analysis."
+
+  strategic_initiative:
+    name: "Strategic Initiative"
+    description: "A larger planning project that benefits from explicit why/what/how structure (PRD, Spec, Work Plan)."
+    references:
+      - references/strategic-initiative/planning-rules.md
     templates:
       - templates/prd-template.md
       - templates/spec-template.md
-    checklists:
-      - references/data-analysis/analysis-checklist.md
-    skills: []
-    plugins:
-      - marketing
-    notes: "Use for PPC reports, traffic analysis, retention studies, campaign reviews."
-
-  research:
-    name: "Research / Synthesis"
-    description: "Deep research projects, competitive intelligence, literature reviews."
-    references:
-      - references/research/research-rules.md
-    templates:
-      - templates/prd-template.md
       - templates/workplan-template.md
     checklists: []
     skills: []
     plugins: []
-    notes: "Use when the deliverable is a research synthesis, not a publication-ready piece."
+    notes: "Use for bigger strategy work — campaign strategy, organizational redesign, data-strategy roadmaps, framework redesigns, etc."
 
 # -----------------------------------------------------------------------------
 # Note on code projects:

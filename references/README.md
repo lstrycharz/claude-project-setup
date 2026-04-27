@@ -1,55 +1,61 @@
 # references/
 
-Long-form rules files and reference documentation, organized by domain. These are the documents Claude reads at the start of a project to learn your standards — first principles, hard constraints, anti-patterns, design patterns, conventions to follow.
+Long-form rules files and reference documentation, organized by domain. These are the documents Claude reads at the start of a project to learn your team's standards — first principles, hard constraints, conventions to follow, things to avoid.
 
 ## Structure
 
-A reasonable layout, with one subfolder per domain:
+The convention is one subfolder per project type, plus a `global/` folder for rules that apply everywhere:
 
 ```
 references/
 ├── global/
 │   └── general-rules.md          # Rules that apply to every project
-├── blog-content/
-│   ├── seo-rules.md
-│   ├── forbidden-words.md
-│   ├── structure-rules.md
-│   └── blog-checklist.md
-├── data-analysis/
-│   ├── analysis-rules.md
-│   ├── visualization-rules.md
-│   └── analysis-checklist.md
-└── research/
-    └── research-rules.md
+├── <project-type-1>/
+│   ├── <project-type-1>-rules.md      # Long-form rules document
+│   └── <project-type-1>-checklist.md  # Validation checklist
+├── <project-type-2>/
+│   └── ...
+└── <project-type-3>/
+    └── ...
 ```
 
-You don't have to use these exact subfolders or filenames — they're examples. Match what your team actually produces.
+Subfolder names should match the project types defined in `manifest.yaml`. The kit ships with starter project types you can rename or replace to fit your team's work.
 
-## How to build a great reference file
+## How to build a useful reference file
 
-A practical method that consistently produces useful files:
+A reference file is essentially a written-down version of "what good looks like" for a kind of work. The aim is that any team member — or Claude — could read it and produce work that matches your team's expectations without having to ask questions.
 
-1. **Pick a domain you do real work in** (e.g., "monthly client PPC reports" or "evergreen blog posts").
-2. **Run a research prompt in a deep-research-capable AI tool** (Gemini, Perplexity, or similar). Ask for: first principles, hard constraints, anti-patterns, design patterns, common mistakes, hidden gotchas, and validation criteria for that specific domain.
-3. **Run the same prompt in a second tool**, then a third. Three independent reports surface what's consensus (likely correct), what's model-specific (worth questioning), and what's unique to one source (worth investigating before trusting).
-4. **Merge the three reports into a single rules file.** Have Claude do the merge — instruct it to keep specifics, remove redundancy, and resolve contradictions in favor of the most-cited claim.
-5. **Pair every rules file with a checklist file.** The rules file is reference material Claude reads at the start of a project; the checklist is what Claude actively runs against output before declaring the work done. The checklist is where the rules get enforced in practice.
+A practical method:
 
-This whole sequence takes 2–4 hours per domain done well. It's an investment, but the resulting file lives for years and improves the quality of every project it touches.
+1. **Pick one kind of work your team does regularly.** Examples: a recurring report, a particular type of document, an analysis pattern, a creative deliverable.
 
-## What "good" looks like
+2. **List what makes that kind of work good vs. bad.** What's required every time? What's never acceptable? What patterns work? What patterns fail? What conventions does your team follow that newcomers don't know?
+
+3. **Optional — for higher-stakes domains, run external research.** Use a deep-research tool (Gemini, Perplexity, or similar) to ask for first principles, hard constraints, anti-patterns, and common mistakes for that domain. Repeating the prompt across two or three different tools surfaces what's consensus vs. what's model-specific. Merging the reports into a single rules file produces something more authoritative than any individual model would generate alone.
+
+4. **Pair every rules file with a checklist file.** The rules file is reference material Claude reads at the start of a project. The checklist is what Claude actively runs against output before declaring the work done. The checklist is where the rules get enforced in practice — without it, rules tend to be applied inconsistently across long projects.
+
+A rules file usually takes 1–3 hours to produce well. The first version doesn't have to be perfect; it gets sharper as you use it on real projects and notice what's missing.
+
+## What "good" looks like in a reference file
 
 A useful reference file has a few specific characteristics:
 
-- **Specific, not aspirational.** "Write engaging content" is aspirational and useless. "Open every section with a stat or specific number, never a question or scenario" is specific and actionable.
-- **Causally explained.** Rules name the consequence — "do X, because if you don't, Y happens."
-- **Opinionated.** It makes calls where experts disagree, and shows its work.
-- **Names anti-patterns by their failure mode.** Not "avoid generic content" but "don't open with a paragraph that summarizes the whole article — readers bounce because the payoff is upfront."
-- **Respects domain vocabulary.** A finance file should use the right finance terms; a marketing file should use the right marketing terms.
-- **Has graduation criteria.** How do you know when a rule has been followed well vs. poorly?
+- **Specific, not aspirational.** "Communicate clearly" is aspirational and doesn't change anyone's behavior. "Open every section with a takeaway, not a setup" is specific and actionable.
+- **Causally explained.** Rules name the consequence — "do X, because if you don't, Y happens." This helps Claude (and team members) make good judgment calls when the rule doesn't perfectly cover their situation.
+- **Opinionated.** It makes calls where reasonable people might disagree, and shows its work.
+- **Names anti-patterns by their failure mode.** Not "avoid weak openings" but "don't open with a definition of the topic — readers either already know what it is or get bored before the payoff."
+- **Respects domain vocabulary.** A finance file should use the right finance terms; an HR file should use the right HR terms. Don't substitute generic terms for domain-specific ones.
+- **Has graduation criteria.** How do you know when the rule has been followed well vs. poorly? If you can't tell, the rule is probably too vague.
 
-A good test for any line in a reference file: would Claude produce meaningfully different output if this line were removed? If no, delete it. The file should be lean and load-bearing.
+A good test for any line in a reference file: would Claude (or a junior team member) produce meaningfully different output if this line were removed? If no, delete it. The file should be lean and load-bearing — every line should be doing real work.
+
+## How long should a rules file be?
+
+Aim for 1,500–3,000 words. Long enough to be comprehensive, short enough that loading it into Claude's context doesn't crowd out the actual project content. If a domain genuinely needs more, split into two files (e.g., one for rules, one for glossary or terminology). The validation checklist is always a separate file from the rules — different purpose, different format.
 
 ## Maintenance
 
-When you notice Claude making the same mistake twice on real projects, update the relevant reference file. Don't let lessons stay siloed inside individual projects' `CLAUDE.md` files forever — periodically distill them back into the master references here. That's how the kit gets sharper over time.
+When you notice Claude (or a teammate) making the same mistake twice across real projects, update the relevant reference file. Don't let lessons stay siloed inside individual projects' `CLAUDE.md` files forever — periodically distill them back into the master references here. That's how the kit gets sharper over time.
+
+If multiple people on your team contribute, the reference files become a record of collective experience — captured once, available to everyone, automatically loaded into every relevant project.

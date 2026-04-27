@@ -88,7 +88,7 @@ If `which claude-init` returns nothing, your shell didn't pick up the new PATH. 
 
 ## Step 5 — Edit the manifest to match your work
 
-Open `~/claude-project-setup/manifest.yaml` in your editor. The kit ships with three starter project types — Blog Content, Marketing Data Analysis, and Research / Synthesis. These are examples. Adjust them, rename them, or add new ones to match the kinds of work your team actually does.
+Open `~/claude-project-setup/manifest.yaml` in your editor. The kit ships with four starter project types — Recurring Report, Multi-Asset Project, Research / Analysis, and Strategic Initiative. These are designed to span common patterns across creative, HR, analytics, and similar teams. Adjust them, rename them, or add new ones to match the work your team actually does.
 
 ## Step 6 — Populate the folders gradually
 
@@ -117,10 +117,10 @@ The script will prompt you to pick a project type and copy the matching assets i
 To preview what would be copied without actually copying anything:
 
 ```bash
-claude-init --type=blog_content --dry-run
+claude-init --type=recurring_report --dry-run
 ```
 
-(Replace `blog_content` with whichever project type you're testing.)
+(Replace `recurring_report` with whichever project type you're testing — the kit ships with `recurring_report`, `multi_asset_project`, `research_analysis`, and `strategic_initiative`.)
 
 ## Step 8 — Commit changes regularly
 

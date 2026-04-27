@@ -4,11 +4,13 @@ A reusable starter kit that gives every new Claude project the same ground rules
 
 If you use Claude for work, you know the experience: every project starts with you re-explaining your standards, your preferred structure, your style rules, your preferences. Every. Time. This kit eliminates that step. You set up your standards once, then bootstrap any new project with a single command.
 
+It's designed to be useful to any team — creative, HR, analytics, or anything else. The examples in this README come from those three, but the underlying mechanics work for any work where standards, structure, and consistency matter.
+
 ---
 
 ## What it actually does
 
-When you start a new project — a research brief, a campaign plan, a monthly client report, anything — you run one command from your project folder:
+When you start a new project — a quarterly review, a campaign brief, a new policy document, a research synthesis, anything — you run one command from your project folder:
 
 ```bash
 claude-init
@@ -20,17 +22,33 @@ Think of it as the difference between briefing a contractor every time vs. handi
 
 ## When would you actually use this?
 
-Some concrete scenarios where this earns its keep:
+Four concrete scenarios where this kit earns its keep, with how each one might look on different teams:
 
-**A recurring monthly client report.** Every month you produce the same kind of analysis — same metrics, same structure, same conventions. Without standards loaded automatically, you fight to remember the format and the things to flag. With the kit, all of that loads with one command. You focus on the analysis, not on re-establishing what "good" looks like.
+**A recurring report you produce on a regular cadence.** Every month or quarter you produce the same kind of report — same structure, same metrics, same conventions, same audience expectations. Without standards loaded automatically, you fight to remember the format and the things to flag. With the kit, all of that loads with one command. You focus on the substance, not on re-establishing what "good" looks like.
 
-**A new client onboarding.** Different brand voice, different industry context, different standards from your usual work. The kit lets you set up a project with the right voice and standards loaded from the start, so Claude isn't guessing or pulling from generic defaults.
+> *On the analytics team:* a monthly executive KPI memo or quarterly performance review.
+> *On the HR team:* a quarterly hiring funnel update or people analytics review.
+> *On the creative team:* a monthly campaign performance recap or content effectiveness report.
 
-**A multi-asset campaign launch.** You're producing a brief, an email sequence, landing page copy, and social posts. Different assets, but they need consistent voice and brand rules across all of them. The kit ensures every piece Claude touches knows the same rules — even when different team members work on different assets.
+**A multi-asset deliverable where consistency matters across pieces.** You're producing several outputs that need to share voice, framing, and conventions — even if different team members touch different pieces. Without shared standards, the assets drift apart in tone and quality. With them, every piece Claude touches knows the same rules.
 
-**A quarterly strategic deliverable.** Something bigger than a normal week's work. The kit ships with templates for a project's *why* (PRD), *what* (Spec), and *how* (Work Plan), turning vague "let's plan this" into a structured sequence with measurable outcomes.
+> *On the creative team:* a campaign with brief, landing page copy, email sequence, and social posts.
+> *On the HR team:* a policy rollout with handbook update, all-staff email, manager talking points, and an FAQ.
+> *On the analytics team:* a quarterly review with executive summary, full report, dashboard documentation, and methodology appendix.
 
-If your day-to-day work is light and Claude already handles it well, you may not need this. The kit pays off when projects are big enough or recurring enough that having standards pre-loaded saves real time.
+**A research or analysis project drawing on multiple sources.** You need to synthesize information from multiple places into a coherent, defensible view. The kit gives Claude a methodology — triangulate sources, surface contradictions, flag single-sourced claims — that turns a "vibes" summary into something rigorous.
+
+> *On the creative team:* a competitive landscape of brand positioning, or a content-format study across competitors.
+> *On the HR team:* a people-analytics deep dive on a specific question (why is attrition up in Department X, what's driving manager survey scores).
+> *On the analytics team:* a customer-segment analysis, an ad-hoc business question, or a market sizing exercise.
+
+**A strategic deliverable larger than a typical week's work.** Something where you want structure, clear milestones, and a way to track decisions. The kit ships with templates for the *why* (PRD), *what* (Spec), and *how* (Work Plan), turning vague "let's plan this thing" into a structured sequence with measurable outcomes.
+
+> *On the creative team:* a strategy document for a major campaign or rebrand.
+> *On the HR team:* an organizational design document, a workforce plan, or a benefits redesign proposal.
+> *On the analytics team:* a data strategy roadmap, a measurement framework, or a KPI redesign initiative.
+
+If your day-to-day work is light and Claude already handles it well, you may not need this. The kit pays off when projects are big enough or recurring enough that having standards pre-loaded saves real time — and especially when multiple people need to produce work that looks like it came from the same place.
 
 ## What's in the kit
 
@@ -72,15 +90,16 @@ No re-explaining. No re-pasting. Standards stay loaded; you focus on the work.
 
 ## What's already included vs. what you customize
 
-The kit ships with three starter project types — but they're examples. The real value comes from editing them to match the work you actually do.
+The kit ships with four starter project types — but they're examples. The real value comes from editing them to match the work your team actually does.
 
 In `manifest.yaml` you'll find:
 
-- **Blog / Evergreen Content** — long-form web content
-- **Marketing Data Analysis** — performance reports, traffic, retention
-- **Research / Synthesis** — competitive intelligence, market research
+- **Recurring Report** — for cyclical reporting work that follows a stable structure
+- **Multi-Asset Project** — for projects where multiple deliverables need shared voice and standards
+- **Research / Analysis** — for projects that synthesize multiple sources into a defensible view
+- **Strategic Initiative** — for larger planning projects that benefit from PRD / Spec / Work Plan structure
 
-You'll edit the manifest to add project types that match your team's work, and you'll fill in the `references/` and `skills/` folders with the standards you want every project of each type to inherit. There's no rush — populate gradually as you go.
+You'll edit the manifest to rename or add project types that match your team's vocabulary, and you'll fill in the `references/` and `skills/` folders with the standards you want every project of each type to inherit. There's no rush — populate gradually as you go.
 
 ## Setup at a glance
 
@@ -113,8 +132,14 @@ If you write code with Claude, use [`claude-setup`](https://github.com/lstrychar
 
 Treat this kit like a small internal product:
 
-When you discover a recurring rule, anti-pattern, or convention worth enforcing, add it to the relevant reference file and commit. When a project type stops fitting your work, edit it. Anything you find yourself doing repeatedly across projects is a candidate to add here. The kit gets sharper the more you use it — and if multiple people on a team contribute, it captures collective experience that would otherwise stay in individual heads.
+When you discover a recurring rule or anti-pattern worth enforcing, add it to the relevant reference file and commit. When a project type stops fitting your work, edit it. Anything you find yourself doing repeatedly across projects is a candidate to add here.
+
+The kit gets sharper the more you use it — and if multiple people on a team contribute, it captures collective experience that would otherwise stay in individual heads.
 
 ## Questions or improvements
 
 Open an issue or a pull request on this repo. The kit is meant to evolve.
+
+## License
+
+MIT — see `LICENSE` file.
