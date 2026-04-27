@@ -73,56 +73,102 @@ A few terms in plain English, in case you're new to Claude:
 - **Template** — a starter document with the standard sections pre-filled, ready for you to add the project-specific content.
 - **The `.claude/` folder** — a hidden folder Claude looks at inside any project. The setup script copies the right files there for each new project. (Hidden folders start with a dot; in Finder, press Cmd+Shift+. to see them.)
 
-## How it works, in practice
+## Getting started
 
-You only do this once: install the kit on your Mac and put it on your `PATH`. (Full instructions in `INSTALL.md`.)
+Setting up the kit takes about five minutes. After that, starting a new project takes about ten seconds.
 
-Then, every time you start a new project:
+### Step 1 — Set up the kit on your Mac (one time, ~5 minutes)
 
-1. Create a folder for the project, anywhere on your Mac.
-2. Open Terminal in that folder.
-3. Run `claude-init`.
-4. Pick the project type when prompted.
-5. The kit creates a `.claude/` folder inside your project with the right rules, templates, and references already loaded.
-6. Open Claude. It will pick up the project's standards automatically.
+You do this once. Open Terminal and run these commands one at a time:
 
-No re-explaining. No re-pasting. Standards stay loaded; you focus on the work.
-
-## What's already included vs. what you customize
-
-The kit ships with four starter project types — but they're examples. The real value comes from editing them to match the work your team actually does.
-
-In `manifest.yaml` you'll find:
-
-- **Recurring Report** — for cyclical reporting work that follows a stable structure
-- **Multi-Asset Project** — for projects where multiple deliverables need shared voice and standards
-- **Research / Analysis** — for projects that synthesize multiple sources into a defensible view
-- **Strategic Initiative** — for larger planning projects that benefit from PRD / Spec / Work Plan structure
-
-You'll edit the manifest to rename or add project types that match your team's vocabulary, and you'll fill in the `references/` and `skills/` folders with the standards you want every project of each type to inherit. There's no rush — populate gradually as you go.
-
-## Setup at a glance
-
-For the full walkthrough, see `INSTALL.md`. The short version, assuming you're on a Mac:
+**1. Clone this repo to a stable location on your Mac.**
 
 ```bash
-# Clone this repo somewhere stable.
 git clone https://github.com/lstrycharz/claude-project-setup.git ~/claude-project-setup
+```
 
-# Install the one tool the script needs (yq is a YAML parser).
+This downloads the kit into a folder called `claude-project-setup` in your home directory.
+
+**2. Install `yq`, the small tool the kit needs to read its config file.**
+
+```bash
 brew install yq
+```
 
-# Make claude-init runnable from any folder.
+(If you don't have Homebrew installed yet, install it first from [brew.sh](https://brew.sh).)
+
+**3. Make `claude-init` runnable from anywhere.**
+
+```bash
 echo 'export PATH="$HOME/claude-project-setup/bin:$PATH"' >> ~/.zshrc
 source ~/.zshrc
+```
 
-# Test it on any new project folder.
-mkdir -p ~/Projects/my-first-project
-cd ~/Projects/my-first-project
+This tells your terminal where to find the `claude-init` command so you can run it from any folder, not just from inside the kit.
+
+**4. Verify it worked.**
+
+```bash
+claude-init --help
+```
+
+You should see the script's usage info. If you see "command not found," open a new Terminal window and try again.
+
+That's it for setup. The kit is installed.
+
+If anything goes wrong, `INSTALL.md` has a more detailed walkthrough including troubleshooting.
+
+### Step 2 — Use it on a new project (every time, ~10 seconds)
+
+Once the kit is set up, every new project follows the same pattern:
+
+**1. Create a folder for your project.** Anywhere on your Mac. Example:
+
+```bash
+mkdir ~/Projects/my-new-project
+cd ~/Projects/my-new-project
+```
+
+**2. Run `claude-init`.** It will show you a list of project types and ask you to pick one:
+
+```bash
 claude-init
 ```
 
-If you're not on a Mac, the kit will still work but you'll need to adapt the install steps to your shell and package manager.
+Type the project type name (e.g. `recurring_report`) and press Enter.
+
+**3. The kit copies the right files into a hidden `.claude/` folder inside your project.** That's where your team's standards, templates, and reference material now live for this project.
+
+**4. Open Claude in this project folder.** Claude will pick up the standards automatically — you don't have to paste anything in or remind it of anything.
+
+You're now ready to do the work. Claude will use the loaded standards every time you work in this folder, on this project.
+
+## What's ready vs. what you build
+
+The kit has two layers, and they each pay off at different points.
+
+**Layer 1 — ready to use the moment you install.** The script (`claude-init`), the four starter project types in the manifest, the PRD/Spec/Work Plan templates, and the folder structure all work out of the box. Day one, you can install the kit and start running `claude-init` on real projects. The templates are deliberately generic — they have the right sections; you fill in the project-specific content.
+
+**Layer 2 — built up over time as your team uses the kit.** The reference files (your team's actual standards), the validation checklists (your team's quality criteria), and any custom skills are what *you* contribute over weeks or months. These start empty. They get built as you work on real projects and notice what conventions are worth capturing.
+
+You don't have to build Layer 2 before getting value from the kit. Adopt as little or as much as makes sense. A reasonable progression:
+
+**Day 1.** Install the kit, run `claude-init` on a real project, get the standard PRD/Spec/Work Plan templates. Already useful.
+
+**First couple of weeks.** Look at the four starter project types in `manifest.yaml`. If "Recurring Report" or "Strategic Initiative" don't match the way your team talks about its work, rename them or add new ones. Write a short reference file for the kind of work you do most often — even a single page is useful.
+
+**First couple of months.** Reference files get sharper as you use them. Validation checklists get added — these are short lists of yes/no questions Claude runs against output before declaring it done. Custom skills get built for the things you do repeatedly. The kit captures your team's standards in a way that didn't exist anywhere before.
+
+**Ongoing.** Each time you notice Claude (or a teammate) making the same mistake twice across projects, you update the relevant reference file. The kit gets sharper through use. Lessons that would otherwise stay in individual heads end up captured in shared files.
+
+The starter project types you'll see in `manifest.yaml`:
+
+- **Recurring Report** — for cyclical reporting work that follows a stable structure (monthly KPIs, quarterly reviews, regular performance updates)
+- **Multi-Asset Project** — for projects producing multiple deliverables that need shared voice and standards (campaign briefs + assets, policy rollouts with multiple comms pieces, report packages)
+- **Research / Analysis** — for one-time projects that synthesize multiple sources into a defensible view (competitive landscapes, deep-dive analyses, ad-hoc business questions)
+- **Strategic Initiative** — for larger planning projects that benefit from explicit why/what/how structure (campaign strategy, organizational design, framework redesigns)
+
+These names are starting points. Edit them to match your team's vocabulary the moment they don't fit.
 
 ## Companion repo for software work
 
