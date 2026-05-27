@@ -1,160 +1,122 @@
 # Install Guide
 
-Walks you through installing this kit on your Mac, putting it under git, and getting `claude-init` working from any project folder.
+How to install the kit and get `claude-init` on your PATH. Pure bash — no external dependencies (no `yq`, no `jq`).
 
-This guide assumes you're comfortable opening Terminal and running a few commands. You don't need to be a developer — but you should be willing to follow the steps in order.
+## Prerequisites
 
-## What you'll need first
+- macOS or Linux (the script is portable bash; Windows works via WSL)
+- `git`
+- Claude installed and working — this kit adds workflow scaffolding to projects you'll use with Claude. It doesn't install Claude itself.
 
-Before starting, make sure you have:
-
-- A Mac (these instructions are Mac-specific; the kit also works on Linux with minor adjustments)
-- [Homebrew](https://brew.sh) installed (for installing the YAML parser this kit needs). If you don't have it, run the install command on the Homebrew homepage first.
-- [Git](https://git-scm.com) installed. Mac usually has it; check with `git --version`.
-- Claude installed and working. This kit doesn't install Claude itself — it adds standards and structure to projects you'll work on with Claude.
-
-## Step 1 — Pick a permanent location
-
-`claude-project-setup` should live somewhere stable and easy to reach. Common choices:
-
-- `~/claude-project-setup/` — Top of your home directory. Easy to reach from any terminal. **Recommended.**
-- `~/Projects/claude-project-setup/` — If you already keep a `Projects` folder for repos.
-- `~/dev/claude-project-setup/` — If you prefer that convention.
-
-Pick one. The rest of this guide assumes `~/claude-project-setup/`.
-
-## Step 2 — Clone the repo
-
-Open Terminal and run:
+## Step 1 — Clone
 
 ```bash
 git clone https://github.com/lstrycharz/claude-project-setup.git ~/claude-project-setup
 cd ~/claude-project-setup
 ```
 
-If you'd rather use SSH (and have an SSH key set up with GitHub):
+SSH variant if you've set up an SSH key with GitHub:
 
 ```bash
 git clone git@github.com:lstrycharz/claude-project-setup.git ~/claude-project-setup
 ```
 
-## Step 3 — Install the prerequisite for `claude-init`
+You can put it anywhere; `~/claude-project-setup` is just the convention. The script resolves its own location, so it works wherever you clone it.
 
-The script uses [`yq`](https://github.com/mikefarah/yq) to read the project type definitions. Install it once:
+## Step 2 — Put `claude-init` on your PATH
 
-```bash
-brew install yq
-```
-
-Verify it installed:
-
-```bash
-yq --version
-```
-
-## Step 4 — Put `claude-init` on your `PATH`
-
-This is what makes the entry point clean. Instead of typing the full path every time, you just type `claude-init` from any project folder.
-
-Add this line to your `~/.zshrc` file (or `~/.bashrc` if you use bash):
+Add this line to your `~/.zshrc` (or `~/.bashrc` for bash):
 
 ```bash
 export PATH="$HOME/claude-project-setup/bin:$PATH"
 ```
 
-If you're not sure how to edit `~/.zshrc`, the simplest way is:
+The one-liner version:
 
 ```bash
 echo 'export PATH="$HOME/claude-project-setup/bin:$PATH"' >> ~/.zshrc
-```
-
-Then reload your shell:
-
-```bash
 source ~/.zshrc
 ```
 
-Verify it worked:
+Verify:
 
 ```bash
 which claude-init
-# Should print something like: /Users/yourname/claude-project-setup/bin/claude-init
+# /Users/you/claude-project-setup/bin/claude-init
 
 claude-init --help
-# Should print the script's usage info
+# Prints usage info
 ```
 
-If `which claude-init` returns nothing, your shell didn't pick up the new PATH. Open a fresh Terminal window and try again.
+If `which claude-init` returns nothing, your shell hasn't picked up the new PATH. Open a fresh terminal or `source ~/.zshrc` again.
 
-## Step 5 — Edit the manifest to match your work
-
-Open `~/claude-project-setup/manifest.yaml` in your editor. The kit ships with four starter project types — Recurring Report, Multi-Asset Project, Research / Analysis, and Strategic Initiative. These are designed to span common patterns across creative, HR, analytics, and similar teams. Adjust them, rename them, or add new ones to match the work your team actually does.
-
-## Step 6 — Populate the folders gradually
-
-The folders ship empty (with READMEs only). Filling them is the real value of the kit, and it happens over time, not in one sitting.
-
-A reasonable starting sequence:
-
-1. **A first reference file.** Pick the project type you do most often. Write a 1–2 page document covering your standards for that kind of work — what good looks like, what to avoid, what conventions to follow. Save it inside `references/<project-type>/`.
-2. **A first checklist.** Distill that reference file into a 15–25 item checklist of yes/no validation questions. Save it alongside the reference file.
-3. **Lift one or two skills you already use** if you've built any — copy them from your existing Claude skills folder into `skills/` here.
-
-Don't try to populate everything at once. Build out one project type fully, use it on a real project, then expand to the next.
-
-## Step 7 — Try it on a test project
-
-Create a test project folder somewhere outside `~/claude-project-setup/`:
+## Step 3 — Try it on a test project
 
 ```bash
-mkdir -p ~/Projects/test-claude-init
-cd ~/Projects/test-claude-init
+mkdir -p ~/test-claude-init && cd ~/test-claude-init
 claude-init
 ```
 
-The script will prompt you to pick a project type and copy the matching assets into a hidden `.claude/` folder inside `test-claude-init`. Re-run the same command — you should see "skip — exists" for everything, confirming the script is safe to re-run without overwriting.
+You should see directories created and starter files written. Re-run the same command; everything should report `[skip - exists]`. That confirms the script is idempotent and safe to re-run.
 
-To preview what would be copied without actually copying anything:
+To preview without writing anything:
 
 ```bash
-claude-init --type=recurring_report --dry-run
+claude-init --dry-run
 ```
 
-(Replace `recurring_report` with whichever project type you're testing — the kit ships with `recurring_report`, `multi_asset_project`, `research_analysis`, and `strategic_initiative`.)
+## Step 4 — Configure your models
 
-## Step 8 — Commit changes regularly
+Open `~/test-claude-init/.claude/settings.json`. Set `thinker_model` and `critic_model` to two **different** Claude models you have access to. The defaults (`claude-sonnet-4-6` for Thinker, `claude-opus-4-7` for Critic) are reasonable starting points — adjust to match what your account supports.
 
-Treat this repo like a small product. Every meaningful change to a rules file, checklist, or template gets a commit with a message that explains *why*. Six months from now you'll thank yourself.
+The full reasoning for why they must be different lives in `.claude/references/global/critic-prompt.md` under "Why this prompt is shaped this way."
 
-A reasonable commit cadence:
+## Step 5 — Use it on a real project
 
-- Add a new reference file → commit
-- Update a checklist after a project taught you something → commit
-- New project type added → commit
-- Lessons learned from a real project distilled back into the master rules → commit
+```bash
+cd ~/Projects/my-research-project
+claude-init
+```
 
-If you're working with teammates, push to GitHub regularly so others get the benefit of your improvements.
+Then drop source materials into `inputs/`, open the project in Claude, and run `/intake`. From there the workflow is:
+
+1. `/intake` — build the source index
+2. `/brainstorm <question>` — produce a structured draft
+3. `/critique <file>` — spawn the independent Critic
+4. `/synthesize` — fold the critique back in
+5. Repeat as needed
+
+## Step 6 — Updating an existing project after improving the master kit
+
+When you improve a rule or a skill in `~/claude-project-setup/`, push the change to your existing projects:
+
+```bash
+cd ~/Projects/old-research-project
+claude-init --update
+```
+
+`--update` overwrites only files in `.claude/references/` and `.claude/skills/`. Your `CLAUDE.md`, `notes/`, `sources/`, and `inputs/` are never touched.
 
 ## Troubleshooting
 
-**`yq: command not found`**
-
-Install with `brew install yq`. If you've installed it but the command still isn't found, your shell may not have picked up Homebrew's location. Check that `/opt/homebrew/bin` (Apple Silicon) or `/usr/local/bin` (Intel Macs) is in your `$PATH`.
-
 **`claude-init: command not found`**
 
-Verify `$HOME/claude-project-setup/bin` is on your `$PATH`. Run:
+Your PATH doesn't include the kit's `bin/` directory. Run:
 
 ```bash
 echo $PATH | tr ':' '\n' | grep claude-project-setup
 ```
 
-If it returns nothing, the line you added to `~/.zshrc` didn't take effect. Open a fresh Terminal window and try again, or run `source ~/.zshrc` manually.
-
-**Script can't find manifest.yaml**
-
-Make sure you're running `claude-init` from inside a target project folder, not from inside `claude-project-setup/` itself. The script uses its own location to find the manifest, but it expects to be invoked from a *target* project folder.
+If empty, the line in your `~/.zshrc` didn't take effect. Open a fresh terminal or `source ~/.zshrc` manually.
 
 **Files copied but not visible in Finder**
 
-The `.claude/` folder is hidden by default (it starts with a dot, which macOS treats as hidden). Press Cmd+Shift+. in Finder to toggle hidden files on. To revert, press the same shortcut again.
+`.claude/` is hidden by default on macOS (starts with a dot). Press `Cmd+Shift+.` in Finder to toggle hidden files.
+
+**"refusing to scaffold inside the claude-project-setup kit itself"**
+
+Run `claude-init` from a *target* project folder, not from inside `~/claude-project-setup/`. The kit's own directory is protected from being scaffolded into itself.
+
+## Optional — commit your improvements
+
+Treat the kit like a small product. When you tune a rule or add a skill, commit it with a message explaining *why*. Six months from now you'll thank yourself, and if you push to your fork, teammates inherit the same improvements.

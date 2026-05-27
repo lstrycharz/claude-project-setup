@@ -1,0 +1,6 @@
+{
+  "thinker_model": "claude-sonnet-4-6",
+  "critic_model": "claude-opus-4-7",
+  "critic_isolation": "fresh-subagent",
+  "notes": "Thinker and Critic MUST use different models. Shared training data means shared blind spots — see .claude/references/global/critic-prompt.md for the reasoning. Edit these if your access or preferences differ."
+}
